@@ -1,9 +1,7 @@
-use std::collections::HashMap;
 use crate::solution::Solution;
-
+use std::collections::HashMap;
 #[cfg(test)]
 mod test;
-
 pub struct Day1 {}
 
 fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
@@ -33,7 +31,7 @@ fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
 
     let mut right_numbers = numbers.iter().map(|v| v.1).collect::<Vec<i32>>();
     right_numbers.sort();
-    
+
     (left_numbers, right_numbers)
 }
 
@@ -54,13 +52,13 @@ impl Solution for Day1 {
 
     fn solve_part2(input: &str) -> String {
         let (left_numbers, right_numbers) = parse_input(input);
-        
+
         let right_occurrences: HashMap<i32, u32> = right_numbers
             .iter()
             .map(|v| (*v, right_numbers.iter().filter(|&n| n == v).count() as u32))
             .collect();
-        
-        let similarity_score : u32 = left_numbers
+
+        let similarity_score: u32 = left_numbers
             .iter()
             .map(|v| (*v as u32) * right_occurrences.get(v).unwrap_or(&0))
             .sum();

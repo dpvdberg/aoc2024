@@ -1,4 +1,5 @@
-use super::*;
+use crate::day1::Day1;
+use crate::solution::Solution;
 
 static SAMPLE: &str = r#"
     3   4

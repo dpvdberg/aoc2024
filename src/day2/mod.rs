@@ -1,8 +1,6 @@
 use crate::solution::Solution;
-
 #[cfg(test)]
 mod test;
-
 pub struct Day2 {}
 
 fn parse_input(input: &str) -> Vec<Vec<i32>> {

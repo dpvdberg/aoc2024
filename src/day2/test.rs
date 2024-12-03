@@ -1,4 +1,5 @@
-use super::*;
+use crate::day2::Day2;
+use crate::solution::Solution;
 
 static SAMPLE : &str = r#"
     7 6 4 2 1
@@ -8,6 +9,7 @@ static SAMPLE : &str = r#"
     8 6 4 4 1
     1 3 6 7 9
     "#;
+
 #[test]
 fn test_part1() {
     assert_eq!(Day2::solve_part1(SAMPLE), "2");
