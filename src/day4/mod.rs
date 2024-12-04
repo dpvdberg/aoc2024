@@ -21,7 +21,7 @@ fn parse_input(input: &str) -> DMatrix<char> {
 
     let flattened = chars.iter().flatten().map(|c| *c).collect::<Vec<char>>();
 
-    DMatrix::from_iterator(rows, columns, flattened)
+    DMatrix::from_row_iterator(rows, columns, flattened)
 }
 
 fn get_directions(offsets_x: Vec<i32>, offsets_y: Vec<i32>) -> Vec<Vector2<i32>> {
@@ -90,7 +90,7 @@ impl Solution for Day4 {
         let mut sum: u32 = 0;
         for row in 0..matrix.nrows() {
             for col in 0..matrix.ncols() {
-                let loc = Vector2::new(col as i32, row as i32);
+                let loc = Vector2::new(row as i32, col as i32);
                 sum += count_occurrences(&matrix, loc, &directions, "XMAS");
             }
         }
@@ -111,7 +111,7 @@ impl Solution for Day4 {
         let mut sum: u32 = 0;
         for row in 0..matrix.nrows() {
             for col in 0..matrix.ncols() {
-                let loc = Vector2::new(col as i32, row as i32);
+                let loc = Vector2::new(row as i32, col as i32);
                 for d in &diagonal_groups {
                     let count_s = count_occurrences(&matrix, loc, &d, "AS");
                     if count_s != 2 {

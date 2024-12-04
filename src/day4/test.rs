@@ -20,7 +20,21 @@ fn test_part1() {
     );
 }
 
-
+#[test]
+fn test_part1_non_square() {
+    assert_eq!(
+        Day4::solve_part1(r#"
+        ..X.
+        ..M.
+        ..A.
+        ..S.
+        ....
+        ....
+        ....
+        "#),
+        "1"
+    );
+}
 
 #[test]
 fn test_part2() {
