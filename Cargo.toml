@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 code-timing-macros = "0.0.5"
 regex = "1.11.1"
+nalgebra = "0.33.2"
