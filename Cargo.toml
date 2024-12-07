@@ -8,3 +8,4 @@ code-timing-macros = { version = "0.0.5", features = ["release"] }
 regex = "1.11.1"
 nalgebra = "0.33.2"
 once_cell = "1.17"
+maplit = "1.0.2"
