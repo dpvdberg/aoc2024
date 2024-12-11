@@ -30,8 +30,8 @@ mod day9;
 mod solution;
 
 fn main() {
-    let input = fs::read_to_string(&"data/day10/input.txt").expect("Failed to read file.");
-    let result = time_snippet!(day10::Day10::solve(&input));
+    let input = fs::read_to_string(&"data/day11/input.txt").expect("Failed to read file.");
+    let result = time_snippet!(day11::Day11::solve(&input));
 
     println!("{}", result)
 }
