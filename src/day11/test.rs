@@ -6,6 +6,6 @@ use crate::solution::Solution;
 fn test_part1() {
     assert_eq!(
         Day11::solve_part1("125 17"),
-        "22"
+        "55312"
     );
 }
