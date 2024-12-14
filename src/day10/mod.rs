@@ -1,8 +1,7 @@
-use std::collections::{HashSet, VecDeque};
 use crate::solution::Solution;
-use nalgebra::{DMatrix, Vector2};
-use once_cell::sync::Lazy;
 use crate::utils::geometry::DIRECTION_VECTORS;
+use nalgebra::{DMatrix, Vector2};
+use std::collections::{HashSet, VecDeque};
 
 #[cfg(test)]
 mod test;
