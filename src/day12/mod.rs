@@ -2,6 +2,7 @@ use crate::solution::Solution;
 use nalgebra::{DMatrix, Vector2};
 use once_cell::sync::Lazy;
 use std::collections::{HashMap, HashSet, VecDeque};
+use crate::utils::geometry::DIRECTION_VECTORS;
 
 #[cfg(test)]
 mod test;
@@ -70,15 +71,6 @@ struct Garden {
     plants: DMatrix<char>,
 }
 
-static DIRECTIONS: Lazy<Vec<Vector2<i32>>> = Lazy::new(|| {
-    vec![
-        Vector2::new(1, 0),
-        Vector2::new(-1, 0),
-        Vector2::new(0, -1),
-        Vector2::new(0, 1),
-    ]
-});
-
 impl Garden {
     fn create_map_index(location: &Vector2<i32>) -> (usize, usize) {
         (location.y as usize, location.x as usize)
@@ -89,7 +81,7 @@ impl Garden {
     }
 
     fn get_neighbors(&self, location: &Vector2<i32>) -> Vec<Vector2<i32>> {
-        DIRECTIONS
+        DIRECTION_VECTORS
             .iter()
             .map(|d| location + d)
             .filter(|l| self.within_bounds(l))

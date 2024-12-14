@@ -28,6 +28,7 @@ mod day7;
 mod day8;
 mod day9;
 mod solution;
+mod utils;
 
 fn main() {
     let input = fs::read_to_string(&"data/day14/input.txt").expect("Failed to read file.");

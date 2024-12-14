@@ -1,8 +1,8 @@
 use crate::solution::Solution;
 use nalgebra::{vector, Vector2};
-use once_cell::sync::Lazy;
 use regex::Regex;
 use std::fmt;
+use crate::utils::geometry::DIRECTION_VECTORS;
 
 #[cfg(test)]
 mod test;
@@ -13,15 +13,6 @@ struct RobotMovement {
     position: Vector2<i32>,
     velocity: Vector2<i32>,
 }
-
-static DIRECTIONS: Lazy<Vec<Vector2<i32>>> = Lazy::new(|| {
-    vec![
-        Vector2::new(1, 0),
-        Vector2::new(-1, 0),
-        Vector2::new(0, -1),
-        Vector2::new(0, 1),
-    ]
-});
 
 impl RobotMovement {
     fn walk(&self, steps: usize, room_size: Vector2<i32>) -> Vector2<i32> {
@@ -35,7 +26,7 @@ impl RobotMovement {
     }
 
     fn get_neighbors(&self) -> Vec<Vector2<i32>> {
-        let neighbors = DIRECTIONS
+        let neighbors = DIRECTION_VECTORS
             .iter()
             .map(|d| self.position + d)
             .collect::<Vec<Vector2<i32>>>();

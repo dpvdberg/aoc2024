@@ -2,6 +2,7 @@ use std::collections::{HashSet, VecDeque};
 use crate::solution::Solution;
 use nalgebra::{DMatrix, Vector2};
 use once_cell::sync::Lazy;
+use crate::utils::geometry::DIRECTION_VECTORS;
 
 #[cfg(test)]
 mod test;
@@ -10,15 +11,6 @@ pub struct Day10 {}
 struct TopologicalMap {
     heights: DMatrix<i32>,
 }
-
-static DIRECTIONS: Lazy<Vec<Vector2<i32>>> = Lazy::new(|| {
-    vec![
-        Vector2::new(1, 0),
-        Vector2::new(-1, 0),
-        Vector2::new(0, -1),
-        Vector2::new(0, 1),
-    ]
-});
 
 impl TopologicalMap {
     fn create_map_index(location: &Vector2<i32>) -> (usize, usize) {
@@ -49,7 +41,7 @@ impl TopologicalMap {
     fn get_neighbors(&self, location: &Vector2<i32>) -> Vec<Vector2<i32>> {
         let current_height = self.heights[Self::create_map_index(location)];
 
-        DIRECTIONS
+        DIRECTION_VECTORS
             .iter()
             .map(|d| location + d)
             .filter(|l| self.within_bounds(l))
