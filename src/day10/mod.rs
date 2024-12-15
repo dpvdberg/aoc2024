@@ -1,3 +1,4 @@
+use crate::utils::nalgebra::MatrixIndex;
 use crate::solution::Solution;
 use crate::utils::geometry::DIRECTION_VECTORS;
 use nalgebra::{DMatrix, Vector2};
@@ -11,17 +12,14 @@ struct TopologicalMap {
     heights: DMatrix<i32>,
 }
 
-impl TopologicalMap {
-    fn create_map_index(location: &Vector2<i32>) -> (usize, usize) {
-        (location.y as usize, location.x as usize)
-    }
+impl TopologicalMap {    
     fn get_trailheads(&self) -> Vec<Vector2<i32>> {
         let mut trailheads: Vec<Vector2<i32>> = vec![];
 
         for y in 0..self.heights.nrows() {
             for x in 0..self.heights.ncols() {
                 let v: Vector2<i32> = Vector2::new(x as i32, y as i32);
-                if self.heights[Self::create_map_index(&v)] == 0 {
+                if self.heights[v.to_matrix_index()] == 0 {
                     trailheads.push(v);
                 }
             }
@@ -38,13 +36,13 @@ impl TopologicalMap {
     }
 
     fn get_neighbors(&self, location: &Vector2<i32>) -> Vec<Vector2<i32>> {
-        let current_height = self.heights[Self::create_map_index(location)];
+        let current_height = self.heights[location.to_matrix_index()];
 
         DIRECTION_VECTORS
             .iter()
             .map(|d| location + d)
             .filter(|l| self.within_bounds(l))
-            .filter(|l| self.heights[Self::create_map_index(l)] == 1 + current_height)
+            .filter(|l| self.heights[l.to_matrix_index()] == 1 + current_height)
             .collect::<Vec<Vector2<i32>>>()
     }
 
@@ -64,7 +62,7 @@ impl TopologicalMap {
                 if allow_revisit || !visited.contains(&neighbor) {
                     visited.insert(neighbor.clone());
 
-                    let height = self.heights[Self::create_map_index(&neighbor)];
+                    let height = self.heights[neighbor.to_matrix_index()];
                     if height == 9 {
                         score += 1;
                     }

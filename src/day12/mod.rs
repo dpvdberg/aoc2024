@@ -2,6 +2,7 @@ use crate::solution::Solution;
 use crate::utils::geometry::DIRECTION_VECTORS;
 use nalgebra::{DMatrix, Vector2};
 use std::collections::{HashMap, HashSet, VecDeque};
+use crate::utils::nalgebra::MatrixIndex;
 
 #[cfg(test)]
 mod test;
@@ -71,10 +72,6 @@ struct Garden {
 }
 
 impl Garden {
-    fn create_map_index(location: &Vector2<i32>) -> (usize, usize) {
-        (location.y as usize, location.x as usize)
-    }
-
     fn within_bounds(&self, l: &Vector2<i32>) -> bool {
         l.x >= 0 && l.x < self.plants.ncols() as i32 && l.y >= 0 && l.y < self.plants.nrows() as i32
     }
@@ -91,7 +88,7 @@ impl Garden {
         let mut current_plot_queue: VecDeque<Vector2<i32>> = VecDeque::new();
         let mut next_plot_starters: Vec<Vector2<i32>> = Vec::new();
         let mut plot = Plot {
-            plant: self.plants[Self::create_map_index(&start)],
+            plant: self.plants[start.to_matrix_index()],
             positions: Vec::new(),
             area: 0,
             perimeter: 0,
@@ -107,12 +104,12 @@ impl Garden {
             visited.insert(current);
             plot.positions.push(current);
 
-            let plant = self.plants[Self::create_map_index(&current)];
+            let plant = self.plants[current.to_matrix_index()];
             let neighbors = self.get_neighbors(&current);
 
             let same_plot_neighbor_count = neighbors
                 .iter()
-                .filter(|n| self.plants[Self::create_map_index(&n)] == plant)
+                .filter(|n| self.plants[n.to_matrix_index()] == plant)
                 .count();
             let added_perimeter = 4 - same_plot_neighbor_count;
 
@@ -124,7 +121,7 @@ impl Garden {
                     continue;
                 }
 
-                let neighbor_plant = self.plants[Self::create_map_index(&neighbor)];
+                let neighbor_plant = self.plants[neighbor.to_matrix_index()];
                 if neighbor_plant == plant {
                     current_plot_queue.push_front(neighbor.clone());
                 } else {

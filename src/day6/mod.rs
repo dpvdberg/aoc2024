@@ -3,6 +3,7 @@ use nalgebra::{vector, DMatrix, Vector2};
 use once_cell::sync::Lazy;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
+use crate::utils::geometry::{Direction};
 
 #[cfg(test)]
 mod test;
@@ -71,20 +72,8 @@ fn is_on_field(field: &DMatrix<TileType>, location: &Vector2<i32>) -> bool {
     field.get(to_field_index(location)).is_some()
 }
 
-#[derive(Clone, PartialEq, Eq, Hash)]
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
 trait RotatableDirection {
     fn rotate_right(&self) -> Direction;
-}
-
-trait VectorizedDirection {
-    fn to_vector(&self) -> Vector2<i32>;
 }
 
 impl RotatableDirection for Direction {
@@ -94,17 +83,6 @@ impl RotatableDirection for Direction {
             Direction::Right => Direction::Down,
             Direction::Down => Direction::Left,
             Direction::Left => Direction::Up,
-        }
-    }
-}
-
-impl VectorizedDirection for Direction {
-    fn to_vector(&self) -> Vector2<i32> {
-        match self {
-            Direction::Up => vector![0, -1],
-            Direction::Down => vector![0, 1],
-            Direction::Left => vector![-1, 0],
-            Direction::Right => vector![1, 0],
         }
     }
 }
