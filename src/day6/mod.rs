@@ -4,6 +4,7 @@ use once_cell::sync::Lazy;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 use crate::utils::geometry::{Direction};
+use crate::utils::nalgebra::MatrixParser;
 
 #[cfg(test)]
 mod test;
@@ -146,26 +147,7 @@ fn walk_grid(field: &DMatrix<TileType>) -> Option<HashSet<Vector2<i32>>> {
 }
 
 fn parse_input(input: &str) -> DMatrix<TileType> {
-    let tiles: Vec<Vec<TileType>> = input
-        .trim()
-        .lines()
-        .map(|l| l.trim())
-        .map(|l| l.chars().map(|c| TILE_TYPE_STRING[&c].clone()).collect())
-        .collect();
-
-    let rows = tiles.len();
-    let columns = tiles.first().map_or(0, |l| l.len());
-
-    if tiles.iter().any(|l| l.len() != columns) {
-        panic!("Not all lines have the same length.")
-    }
-
-    let flattened = tiles
-        .iter()
-        .flatten()
-        .map(|c| c.clone())
-        .collect::<Vec<TileType>>();
-    DMatrix::from_row_iterator(rows, columns, flattened)
+    input.to_string().to_matrix(|c| TILE_TYPE_STRING[&c].clone())
 }
 
 impl Solution for Day6 {

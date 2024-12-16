@@ -1,27 +1,13 @@
 use crate::solution::Solution;
 use nalgebra::{DMatrix, Vector2};
+use crate::utils::nalgebra::MatrixParser;
 
 #[cfg(test)]
 mod test;
 pub struct Day4 {}
 
 fn parse_input(input: &str) -> DMatrix<char> {
-    let chars = input
-        .trim()
-        .lines()
-        .skip_while(|&x| x.is_empty())
-        .map(|l| l.trim().chars().collect())
-        .collect::<Vec<Vec<char>>>();
-    let rows = chars.len();
-    let columns = chars.first().map_or(0, |l| l.len());
-
-    if chars.iter().any(|l| l.len() != columns) {
-        panic!("Not all lines have the same length.")
-    }
-
-    let flattened = chars.iter().flatten().map(|c| *c).collect::<Vec<char>>();
-
-    DMatrix::from_row_iterator(rows, columns, flattened)
+    input.to_string().to_matrix(|c| c)
 }
 
 fn get_directions(offsets_x: Vec<i32>, offsets_y: Vec<i32>) -> Vec<Vector2<i32>> {

@@ -2,7 +2,7 @@ use crate::solution::Solution;
 use crate::utils::geometry::DIRECTION_VECTORS;
 use nalgebra::{DMatrix, Vector2};
 use std::collections::{HashMap, HashSet, VecDeque};
-use crate::utils::nalgebra::MatrixIndex;
+use crate::utils::nalgebra::{MatrixIndex, MatrixParser};
 
 #[cfg(test)]
 mod test;
@@ -159,28 +159,10 @@ impl Garden {
 }
 
 fn parse_input(input: &str) -> Garden {
-    let plants: Vec<Vec<char>> = input
-        .trim()
-        .lines()
-        .map(|l| l.trim())
-        .map(|l| l.chars().collect())
-        .collect();
-
-    let rows = plants.len();
-    let columns = plants.first().map_or(0, |l| l.len());
-
-    if plants.iter().any(|l| l.len() != columns) {
-        panic!("Not all lines have the same length.")
-    }
-
-    let flattened = plants
-        .iter()
-        .flatten()
-        .map(|c| c.clone())
-        .collect::<Vec<char>>();
+    let plants = input.to_string().to_matrix(|c| c);
 
     Garden {
-        plants: DMatrix::from_row_iterator(rows, columns, flattened),
+        plants,
     }
 }
 

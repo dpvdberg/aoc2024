@@ -3,7 +3,7 @@ use std::fmt;
 use nalgebra::{vector, DMatrix, Vector2};
 use crate::solution::Solution;
 use crate::utils::geometry::{Direction};
-use crate::utils::nalgebra::{MatrixAt, MatrixIndex};
+use crate::utils::nalgebra::{MatrixAt, MatrixIndex, MatrixParser};
 
 #[cfg(test)]
 mod test;
@@ -138,45 +138,25 @@ impl fmt::Display for Warehouse {
 }
 
 fn parse_warehouse(input: &str, expand: bool) -> DMatrix<WarehouseTile> {
-    let tiles: Vec<Vec<WarehouseTile>> = input
-        .trim()
-        .lines()
-        .map(|l| l.trim())
-        .map(|l| {
-            let mut new_line : String = l.into();
-            if expand {
-                new_line = new_line.replace("#", "##");
-                new_line = new_line.replace("O", "[]");
-                new_line = new_line.replace(".", "..");
-                new_line = new_line.replace("@", "@.");
-            }
-            new_line
-        })
-        .map(|l| l.chars().map(|c| match c {
-            '#' => WarehouseTile::Wall,
-            'O' => WarehouseTile::Box,
-            '.' => WarehouseTile::Floor,
-            '@' => WarehouseTile::Robot,
-            '[' => WarehouseTile::BoxLeft,
-            ']' => WarehouseTile::BoxRight,
-            _ => panic!("Could not parse warehouse tile: {}", c)
-        }).collect())
-        .collect();
-
-    let rows = tiles.len();
-    let columns = tiles.first().map_or(0, |l| l.len());
-
-    if tiles.iter().any(|l| l.len() != columns) {
-        panic!("Not all lines have the same length.")
+    let mut input_processed: String = input.into();
+    if expand {
+        input_processed = input_processed.replace("#", "##");
+        input_processed = input_processed.replace("O", "[]");
+        input_processed = input_processed.replace(".", "..");
+        input_processed = input_processed.replace("@", "@.");
     }
+    
+    let tiles = input_processed.to_matrix(|c| match c {
+        '#' => WarehouseTile::Wall,
+        'O' => WarehouseTile::Box,
+        '.' => WarehouseTile::Floor,
+        '@' => WarehouseTile::Robot,
+        '[' => WarehouseTile::BoxLeft,
+        ']' => WarehouseTile::BoxRight,
+        _ => panic!("Could not parse warehouse tile: {}", c)
+    });
 
-    let flattened : Vec<WarehouseTile> = tiles
-        .iter()
-        .flatten()
-        .map(|c| c.clone())
-        .collect::<Vec<WarehouseTile>>();
-
-    DMatrix::from_row_iterator(rows, columns, flattened)
+    tiles
 }
 
 fn parse_moves(input: &str) -> VecDeque<Direction> {

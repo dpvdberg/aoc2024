@@ -1,4 +1,4 @@
-use crate::utils::nalgebra::MatrixIndex;
+use crate::utils::nalgebra::{MatrixIndex, MatrixParser};
 use crate::solution::Solution;
 use crate::utils::geometry::DIRECTION_VECTORS;
 use nalgebra::{DMatrix, Vector2};
@@ -12,7 +12,7 @@ struct TopologicalMap {
     heights: DMatrix<i32>,
 }
 
-impl TopologicalMap {    
+impl TopologicalMap {
     fn get_trailheads(&self) -> Vec<Vector2<i32>> {
         let mut trailheads: Vec<Vector2<i32>> = vec![];
 
@@ -27,7 +27,7 @@ impl TopologicalMap {
 
         trailheads
     }
-    
+
     fn within_bounds(&self, l: &Vector2<i32>) -> bool {
         l.x >= 0
             && l.x < self.heights.ncols() as i32
@@ -47,8 +47,8 @@ impl TopologicalMap {
     }
 
     fn bfs_walk(&self, location: &Vector2<i32>, allow_revisit: bool) -> i32 {
-        let mut queue : VecDeque<Vector2<i32>> = VecDeque::new();
-        let mut visited : HashSet<Vector2<i32>> = HashSet::new();
+        let mut queue: VecDeque<Vector2<i32>> = VecDeque::new();
+        let mut visited: HashSet<Vector2<i32>> = HashSet::new();
 
         let mut score = 0;
 
@@ -74,7 +74,7 @@ impl TopologicalMap {
 
         score
     }
-    
+
     fn score(&self) -> i32 {
         self.get_trailheads()
             .iter()
@@ -91,32 +91,11 @@ impl TopologicalMap {
 }
 
 fn parse_input(input: &str) -> TopologicalMap {
-    let heights: Vec<Vec<i32>> = input
-        .trim()
-        .lines()
-        .map(|l| l.trim())
-        .map(|l| {
-            l.chars()
-                .map(|c| c.to_digit(10).map(|d| d as i32).unwrap_or(-1))
-                .collect()
-        })
-        .collect();
-
-    let rows = heights.len();
-    let columns = heights.first().map_or(0, |l| l.len());
-
-    if heights.iter().any(|l| l.len() != columns) {
-        panic!("Not all lines have the same length.")
-    }
-
-    let flattened = heights
-        .iter()
-        .flatten()
-        .map(|c| c.clone())
-        .collect::<Vec<i32>>();
+    let heights = input.to_string()
+        .to_matrix(|c| c.to_digit(10).map(|d| d as i32).unwrap_or(-1));
 
     TopologicalMap {
-        heights: DMatrix::from_row_iterator(rows, columns, flattened),
+        heights,
     }
 }
 
