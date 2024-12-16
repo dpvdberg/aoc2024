@@ -1,8 +1,9 @@
 use crate::solution::Solution;
-use crate::utils::geometry::DIRECTION_VECTORS;
+use crate::utils::geometry::{Direction};
 use nalgebra::{DMatrix, Vector2};
 use std::collections::{HashMap, HashSet, VecDeque};
-use crate::utils::nalgebra::{MatrixIndex, MatrixParser};
+use strum::IntoEnumIterator;
+use crate::utils::nalgebra::{VectorHelpers, MatrixParser};
 
 #[cfg(test)]
 mod test;
@@ -77,9 +78,8 @@ impl Garden {
     }
 
     fn get_neighbors(&self, location: &Vector2<i32>) -> Vec<Vector2<i32>> {
-        DIRECTION_VECTORS
-            .iter()
-            .map(|d| location + d)
+        Direction::iter()
+            .map(|d| location + d.to_vector())
             .filter(|l| self.within_bounds(l))
             .collect::<Vec<Vector2<i32>>>()
     }

@@ -3,7 +3,7 @@ use std::fmt;
 use nalgebra::{vector, DMatrix, Vector2};
 use crate::solution::Solution;
 use crate::utils::geometry::{Direction};
-use crate::utils::nalgebra::{MatrixAt, MatrixIndex, MatrixParser};
+use crate::utils::nalgebra::{MatrixHelpers, VectorHelpers, MatrixParser};
 
 #[cfg(test)]
 mod test;

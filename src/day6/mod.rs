@@ -73,21 +73,6 @@ fn is_on_field(field: &DMatrix<TileType>, location: &Vector2<i32>) -> bool {
     field.get(to_field_index(location)).is_some()
 }
 
-trait RotatableDirection {
-    fn rotate_right(&self) -> Direction;
-}
-
-impl RotatableDirection for Direction {
-    fn rotate_right(&self) -> Direction {
-        match self {
-            Direction::Up => Direction::Right,
-            Direction::Right => Direction::Down,
-            Direction::Down => Direction::Left,
-            Direction::Left => Direction::Up,
-        }
-    }
-}
-
 fn find_position<T: PartialEq>(matrix: &DMatrix<T>, target: &T) -> Option<Vector2<i32>> {
     for row in 0..matrix.nrows() {
         for col in 0..matrix.ncols() {
@@ -122,7 +107,7 @@ fn walk_grid(field: &DMatrix<TileType>) -> Option<HashSet<Vector2<i32>>> {
 
     while is_on_field(&guard.field, &new_position) {
         if guard.field[to_field_index(&new_position)] == TileType::Wall {
-            guard_direction = guard_direction.rotate_right();
+            guard_direction = guard_direction.clockwise();
         } else {
             guard_position = new_position;
         }

@@ -2,7 +2,8 @@ use crate::solution::Solution;
 use nalgebra::{vector, Vector2};
 use regex::Regex;
 use std::fmt;
-use crate::utils::geometry::DIRECTION_VECTORS;
+use strum::IntoEnumIterator;
+use crate::utils::geometry::{Direction};
 
 #[cfg(test)]
 mod test;
@@ -26,9 +27,8 @@ impl RobotMovement {
     }
 
     fn get_neighbors(&self) -> Vec<Vector2<i32>> {
-        let neighbors = DIRECTION_VECTORS
-            .iter()
-            .map(|d| self.position + d)
+        let neighbors = Direction::iter()
+            .map(|d| self.position + d.to_vector())
             .collect::<Vec<Vector2<i32>>>();
 
         neighbors

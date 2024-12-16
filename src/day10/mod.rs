@@ -1,8 +1,9 @@
-use crate::utils::nalgebra::{MatrixIndex, MatrixParser};
+use crate::utils::nalgebra::{VectorHelpers, MatrixParser};
 use crate::solution::Solution;
-use crate::utils::geometry::DIRECTION_VECTORS;
+use crate::utils::geometry::{Direction};
 use nalgebra::{DMatrix, Vector2};
 use std::collections::{HashSet, VecDeque};
+use strum::IntoEnumIterator;
 
 #[cfg(test)]
 mod test;
@@ -38,9 +39,8 @@ impl TopologicalMap {
     fn get_neighbors(&self, location: &Vector2<i32>) -> Vec<Vector2<i32>> {
         let current_height = self.heights[location.to_matrix_index()];
 
-        DIRECTION_VECTORS
-            .iter()
-            .map(|d| location + d)
+        Direction::iter()
+            .map(|d| location + d.to_vector())
             .filter(|l| self.within_bounds(l))
             .filter(|l| self.heights[l.to_matrix_index()] == 1 + current_height)
             .collect::<Vec<Vector2<i32>>>()
