@@ -23,13 +23,14 @@ impl ClawMachine {
 
         if let Some(inverse_matrix) = matrix.map(|v| v as f64).try_inverse() {
             let v_float = inverse_matrix * Vector2::new(self.price.x as f64, self.price.y as f64);
-            let button_count : Vector2<i64> = Vector2::new(v_float.x.round() as i64, v_float.y.round() as i64);
+            let button_count: Vector2<i64> =
+                Vector2::new(v_float.x.round() as i64, v_float.y.round() as i64);
             if let Some(m) = max {
                 if button_count.x > m || button_count.y > m {
                     return None;
                 }
             }
-            
+
             if matrix * button_count == self.price {
                 return Some(button_count);
             }
@@ -37,18 +38,17 @@ impl ClawMachine {
 
         None
     }
-    
+
     fn tokens_for_price(&self, max: Option<i64>) -> Option<Vector2<i64>> {
         if let Some(count) = self.solve_button_count(max) {
             return Some(Vector2::new(count.x * 3, count.y));
         }
-        
+
         None
     }
 }
 
-static CLAW_DESCRIPTION_REGEX: &str =
-    r"\Button A: X\+(\d+), Y\+(\d+)\r?\n\s*Button B: X\+(\d+), Y\+(\d+)\r?\n\s*Prize: X=(\d+), Y=(\d+)";
+static CLAW_DESCRIPTION_REGEX: &str = r"\Button A: X\+(\d+), Y\+(\d+)\r?\n\s*Button B: X\+(\d+), Y\+(\d+)\r?\n\s*Prize: X=(\d+), Y=(\d+)";
 fn parse_input(input: &str) -> Vec<ClawMachine> {
     let re = Regex::new(CLAW_DESCRIPTION_REGEX).unwrap();
 
@@ -63,25 +63,26 @@ fn parse_input(input: &str) -> Vec<ClawMachine> {
 }
 
 impl Solution for Day13 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let machines = parse_input(input);
-        
-        machines.iter()
+
+        machines
+            .iter()
             .filter_map(|machine| machine.tokens_for_price(Some(100)))
             .map(|v| v.sum())
             .sum::<i64>()
             .to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let machines = parse_input(input);
-        
-        machines.iter()
+
+        machines
+            .iter()
             .map(|m| ClawMachine {
-                button_a : m.button_a,
-                button_b : m.button_b,
-                price : m.price + vector![10000000000000, 10000000000000],
-                
+                button_a: m.button_a,
+                button_b: m.button_b,
+                price: m.price + vector![10000000000000, 10000000000000],
             })
             .filter_map(|machine| machine.tokens_for_price(None))
             .map(|v| v.sum())

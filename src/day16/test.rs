@@ -1,7 +1,6 @@
 use crate::day16::Day16;
 use crate::solution::Solution;
 
-
 static SAMPLE: &str = r#"
 ###############
 #.......#....E#
@@ -22,24 +21,22 @@ static SAMPLE: &str = r#"
 
 #[test]
 fn test_part1() {
-    assert_eq!(
-        Day16::solve_part1(SAMPLE),
-        "7036"
-    );
+    let day = Day16 {};
+    assert_eq!(day.solve_part1(SAMPLE), "7036");
 }
 
 #[test]
 fn test_part2_first() {
-    assert_eq!(
-        Day16::solve_part2(SAMPLE),
-        "45"
-    );
+    let day = Day16 {};
+    assert_eq!(day.solve_part2(SAMPLE), "45");
 }
 
 #[test]
 fn test_part2_second() {
+    let day = Day16 {};
     assert_eq!(
-        Day16::solve_part2(r#"
+        day.solve_part2(
+            r#"
         #################
         #...#...#...#..E#
         #.#.#.#.#.#.#.#.#
@@ -56,7 +53,8 @@ fn test_part2_second() {
         #.#.#.........#.#
         #.#.#.#########.#
         #S#.............#
-        #################"#),
+        #################"#
+        ),
         "64"
     );
 }

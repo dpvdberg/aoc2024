@@ -1,9 +1,9 @@
 use crate::solution::Solution;
-use crate::utils::geometry::{Direction};
+use crate::utils::geometry::Direction;
+use crate::utils::nalgebra::{MatrixParser, VectorHelpers};
 use nalgebra::{DMatrix, Vector2};
 use std::collections::{HashMap, HashSet, VecDeque};
 use strum::IntoEnumIterator;
-use crate::utils::nalgebra::{VectorHelpers, MatrixParser};
 
 #[cfg(test)]
 mod test;
@@ -20,7 +20,7 @@ fn array_boundaries(values: &Vec<i32>) -> (Vec<i32>, Vec<i32>) {
     if values.is_empty() {
         return (vec![], vec![]);
     }
-    
+
     let mut v = values.clone();
     v.sort();
 
@@ -52,20 +52,34 @@ impl Plot {
         let mut right_slices: HashMap<i32, Vec<i32>> = HashMap::new();
 
         for y in y_min..=y_max {
-            let positions = self.positions.iter().filter(|p| p.y == y).collect::<Vec<_>>();
+            let positions = self
+                .positions
+                .iter()
+                .filter(|p| p.y == y)
+                .collect::<Vec<_>>();
             let x_values = positions.iter().map(|p| p.x).collect::<Vec<_>>();
             let (left_fences, right_fences) = array_boundaries(&x_values);
 
-            left_fences.iter().for_each(|x| left_slices.entry(*x).or_insert_with(Vec::new).push(y));
-            right_fences.iter().for_each(|x| right_slices.entry(*x).or_insert_with(Vec::new).push(y));
+            left_fences
+                .iter()
+                .for_each(|x| left_slices.entry(*x).or_insert_with(Vec::new).push(y));
+            right_fences
+                .iter()
+                .for_each(|x| right_slices.entry(*x).or_insert_with(Vec::new).push(y));
         }
 
-        let left_fences : usize = left_slices.values().map(|p| count_consecutive_values(p)).sum();
-        let right_fences : usize = right_slices.values().map(|p| count_consecutive_values(p)).sum();
+        let left_fences: usize = left_slices
+            .values()
+            .map(|p| count_consecutive_values(p))
+            .sum();
+        let right_fences: usize = right_slices
+            .values()
+            .map(|p| count_consecutive_values(p))
+            .sum();
 
         // #(horizontal edges) equals #(vertical edges) in a rectilinear polygon
         2 * (right_fences + left_fences)
-    } 
+    }
 }
 
 struct Garden {
@@ -84,7 +98,11 @@ impl Garden {
             .collect::<Vec<Vector2<i32>>>()
     }
 
-    fn explore_plot(&self, start: Vector2<i32>, visited: &mut HashSet<Vector2<i32>>) -> (Plot, Vec<Vector2<i32>>) {
+    fn explore_plot(
+        &self,
+        start: Vector2<i32>,
+        visited: &mut HashSet<Vector2<i32>>,
+    ) -> (Plot, Vec<Vector2<i32>>) {
         let mut current_plot_queue: VecDeque<Vector2<i32>> = VecDeque::new();
         let mut next_plot_starters: Vec<Vector2<i32>> = Vec::new();
         let mut plot = Plot {
@@ -146,10 +164,12 @@ impl Garden {
             if visited.contains(&current) {
                 continue;
             }
-            
+
             let (plot, next_plot_starters) = self.explore_plot(current, &mut visited);
 
-            next_plot_starters.iter().for_each(|p| plot_starters.push_back(*p));
+            next_plot_starters
+                .iter()
+                .for_each(|p| plot_starters.push_back(*p));
 
             plots.push(plot);
         }
@@ -161,13 +181,11 @@ impl Garden {
 fn parse_input(input: &str) -> Garden {
     let plants = input.to_string().to_matrix(|c| c);
 
-    Garden {
-        plants,
-    }
+    Garden { plants }
 }
 
 impl Solution for Day12 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let garden = parse_input(input);
         garden
             .find_plots()
@@ -177,7 +195,7 @@ impl Solution for Day12 {
             .to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let garden = parse_input(input);
         garden
             .find_plots()

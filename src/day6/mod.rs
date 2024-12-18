@@ -1,10 +1,10 @@
 use crate::solution::Solution;
+use crate::utils::geometry::Direction;
+use crate::utils::nalgebra::MatrixParser;
 use nalgebra::{vector, DMatrix, Vector2};
 use once_cell::sync::Lazy;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
-use crate::utils::geometry::{Direction};
-use crate::utils::nalgebra::MatrixParser;
 
 #[cfg(test)]
 mod test;
@@ -29,23 +29,35 @@ impl fmt::Display for TileType {
 
 static TILE_TYPE_STRING: Lazy<HashMap<char, TileType>> = Lazy::new(|| {
     [
-        (TileType::Wall.to_string().chars().next().unwrap(), TileType::Wall),
-        (TileType::Floor.to_string().chars().next().unwrap(), TileType::Floor),
-        (TileType::Start.to_string().chars().next().unwrap(), TileType::Start),
+        (
+            TileType::Wall.to_string().chars().next().unwrap(),
+            TileType::Wall,
+        ),
+        (
+            TileType::Floor.to_string().chars().next().unwrap(),
+            TileType::Floor,
+        ),
+        (
+            TileType::Start.to_string().chars().next().unwrap(),
+            TileType::Start,
+        ),
     ]
-        .iter()
-        .cloned()
-        .collect()
+    .iter()
+    .cloned()
+    .collect()
 });
 
 impl fmt::Display for Guard {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         for row in 0..self.field.nrows() {
             for col in 0..self.field.ncols() {
-                if self.history.iter()
+                if self
+                    .history
+                    .iter()
                     .map(|h| h.position)
                     .collect::<Vec<_>>()
-                    .contains(&Vector2::new(col as i32, row as i32)) {
+                    .contains(&Vector2::new(col as i32, row as i32))
+                {
                     write!(fmt, "@")?;
                 } else {
                     let tile = self.field.get((row, col)).unwrap();
@@ -122,9 +134,8 @@ fn walk_grid(field: &DMatrix<TileType>) -> Option<HashSet<Vector2<i32>>> {
         new_position = guard_position + guard_direction.to_vector()
     }
 
-    let unique_positions: HashSet<Vector2<i32>> = guard.history.iter()
-        .map(|l| l.position)
-        .collect();
+    let unique_positions: HashSet<Vector2<i32>> =
+        guard.history.iter().map(|l| l.position).collect();
 
     // println!("{}", guard);
 
@@ -132,25 +143,28 @@ fn walk_grid(field: &DMatrix<TileType>) -> Option<HashSet<Vector2<i32>>> {
 }
 
 fn parse_input(input: &str) -> DMatrix<TileType> {
-    input.to_string().to_matrix(|c| TILE_TYPE_STRING[&c].clone())
+    input
+        .to_string()
+        .to_matrix(|c| TILE_TYPE_STRING[&c].clone())
 }
 
 impl Solution for Day6 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let field = parse_input(input);
         walk_grid(&field).unwrap().len().to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let field = parse_input(input);
         let initial_positions = walk_grid(&field).unwrap_or_default();
 
-        initial_positions.iter()
+        initial_positions
+            .iter()
             .filter(|p| field[to_field_index(p)] == TileType::Floor)
             .filter(|p| {
                 let mut modified_grid = field.clone();
                 modified_grid[to_field_index(p)] = TileType::Wall;
-                
+
                 walk_grid(&modified_grid).is_none()
             })
             .count()

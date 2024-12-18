@@ -44,7 +44,7 @@ fn parse_input(input: &str) -> PageData {
 
 fn satisfies_ordering_rule(update: &Vec<u32>, rule: &(u32, u32)) -> bool {
     if !update.contains(&rule.0) || !update.contains(&rule.1) {
-        return true
+        return true;
     }
 
     let left_index = update.iter().position(|&n| n == rule.0).unwrap();
@@ -54,20 +54,21 @@ fn satisfies_ordering_rule(update: &Vec<u32>, rule: &(u32, u32)) -> bool {
 }
 
 fn update_satisfies_ordering_rules(update: &Vec<u32>, rules: &Vec<(u32, u32)>) -> bool {
-    rules
-        .iter()
-        .all(|r| satisfies_ordering_rule(update, r))
+    rules.iter().all(|r| satisfies_ordering_rule(update, r))
 }
 
 fn create_update_for_rules(update: &Vec<u32>, rules: &Vec<(u32, u32)>) -> Vec<u32> {
     let mut new_update = update.clone();
 
-    while let Some((left, right)) = rules.iter().find(|r| !satisfies_ordering_rule(&new_update, r)) {
+    while let Some((left, right)) = rules
+        .iter()
+        .find(|r| !satisfies_ordering_rule(&new_update, r))
+    {
         let left_index = new_update.iter().position(|&n| n == *left).unwrap();
         let right_index = new_update.iter().position(|&n| n == *right).unwrap();
         new_update.swap(left_index, right_index);
     }
-    
+
     new_update
 }
 
@@ -80,7 +81,7 @@ fn get_middle_number(update: &Vec<u32>) -> u32 {
 }
 
 impl Solution for Day5 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let data = parse_input(input);
 
         data.updates
@@ -91,9 +92,9 @@ impl Solution for Day5 {
             .to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let data = parse_input(input);
-        
+
         data.updates
             .iter()
             .filter(|&p| !update_satisfies_ordering_rules(p, &data.ordering_rules))

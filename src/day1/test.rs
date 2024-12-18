@@ -12,10 +12,12 @@ static SAMPLE: &str = r#"
 
 #[test]
 fn test_part1() {
-    assert_eq!(Day1::solve_part1(SAMPLE), "11");
+    let day = Day1 {};
+    assert_eq!(day.solve_part1(SAMPLE), "11");
 }
 
 #[test]
 fn test_part2() {
-    assert_eq!(Day1::solve_part2(SAMPLE), "31");
+    let day = Day1 {};
+    assert_eq!(day.solve_part2(SAMPLE), "31");
 }

@@ -1,9 +1,9 @@
 use crate::solution::Solution;
+use crate::utils::geometry::Direction;
 use nalgebra::{vector, Vector2};
 use regex::Regex;
 use std::fmt;
 use strum::IntoEnumIterator;
-use crate::utils::geometry::{Direction};
 
 #[cfg(test)]
 mod test;
@@ -92,7 +92,7 @@ impl RobotField {
         let mut moved_field = self.clone();
 
         let mut walk_counter = 0;
-        
+
         loop {
             for robot in moved_field.robots.iter_mut() {
                 robot.position = robot.walk(1, self.size);
@@ -112,7 +112,7 @@ impl RobotField {
                     walk_counter
                 );
                 println!("{}", moved_field);
-                
+
                 return Some(walk_counter);
             }
 
@@ -170,14 +170,17 @@ fn parse_input(input: &str) -> RobotField {
 }
 
 impl Solution for Day14 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let field = parse_input(input);
         field.compute_safety_factor(100).to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let field = parse_input(input);
 
-        field.find_christmas_tree(0.2).unwrap_or_default().to_string()
+        field
+            .find_christmas_tree(0.2)
+            .unwrap_or_default()
+            .to_string()
     }
 }

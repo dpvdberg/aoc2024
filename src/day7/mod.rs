@@ -82,7 +82,7 @@ fn check_equation_solvable(equation: &Equation, allow_concatenate: bool) -> bool
 }
 
 impl Solution for Day7 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let equations = parse_input(input);
         equations
             .into_iter()
@@ -92,7 +92,7 @@ impl Solution for Day7 {
             .to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let equations = parse_input(input);
         equations
             .into_iter()

@@ -13,19 +13,14 @@ static SAMPLE: &str = r#"
 292: 11 6 16 20
 "#;
 
-
 #[test]
 fn test_part1() {
-    assert_eq!(
-        Day7::solve_part1(SAMPLE),
-        "3749"
-    );
+    let day = Day7 {};
+    assert_eq!(day.solve_part1(SAMPLE), "3749");
 }
 
 #[test]
 fn test_part2() {
-    assert_eq!(
-        Day7::solve_part2(SAMPLE),
-        "11387"
-    );
+    let day = Day7 {};
+    assert_eq!(day.solve_part2(SAMPLE), "11387");
 }

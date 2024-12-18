@@ -1,5 +1,5 @@
-use std::cmp::min;
 use crate::solution::Solution;
+use std::cmp::min;
 use std::fmt;
 pub use std::fmt::Write;
 
@@ -29,13 +29,17 @@ struct Disk {
     blocks: Vec<Block>,
 }
 impl Disk {
-    fn insert_empty_block(&mut self, required_size: usize, max_index: usize) -> Option<(&mut Block, usize)> {
+    fn insert_empty_block(
+        &mut self,
+        required_size: usize,
+        max_index: usize,
+    ) -> Option<(&mut Block, usize)> {
         let max_index = min(max_index, self.blocks.len() - 1);
-        
+
         for i in 0..max_index {
             let block = &self.blocks[i];
-            let block_ahead = &self.blocks[i+1];
-            
+            let block_ahead = &self.blocks[i + 1];
+
             let empty_space = (block_ahead.index - (block.index + block.size as u32)) as usize;
             if empty_space >= required_size {
                 let new_block = Block {
@@ -52,12 +56,18 @@ impl Disk {
         None
     }
 
-    fn compact_block(&mut self, block: Block, allow_fragmentation: bool, max_index: usize) -> usize {
+    fn compact_block(
+        &mut self,
+        block: Block,
+        allow_fragmentation: bool,
+        max_index: usize,
+    ) -> usize {
         let mut remaining_size: usize = block.size;
 
         while remaining_size > 0 {
             let min_block_size = if allow_fragmentation { 1 } else { block.size };
-            if let Some((new_block, max_size)) = self.insert_empty_block(min_block_size, max_index) {
+            if let Some((new_block, max_size)) = self.insert_empty_block(min_block_size, max_index)
+            {
                 new_block.file_id = block.file_id;
                 if remaining_size <= max_size {
                     new_block.size = remaining_size;
@@ -79,7 +89,8 @@ impl Disk {
             let mut compacted_last_block = true;
             while compacted_last_block {
                 let block = self.blocks.last().unwrap().clone();
-                let remaining_size = self.compact_block(block, allow_fragmentation, self.blocks.len());
+                let remaining_size =
+                    self.compact_block(block, allow_fragmentation, self.blocks.len());
                 if remaining_size == 0 {
                     self.blocks.pop();
                     compacted_last_block = true;
@@ -156,17 +167,17 @@ fn parse_input(input: &str) -> Disk {
 }
 
 impl Solution for Day9 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let mut disk = parse_input(input);
         disk.compact(true);
-        
+
         disk.checksum().to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let mut disk = parse_input(input);
         disk.compact(false);
-        
+
         disk.checksum().to_string()
     }
 }

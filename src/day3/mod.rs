@@ -27,7 +27,7 @@ enum Action {
 }
 
 impl Solution for Day3 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         parse_input(input)
             .iter()
             .map(|&(left, right)| left * right)
@@ -35,21 +35,25 @@ impl Solution for Day3 {
             .to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let mut action_map: HashMap<&str, Action> = HashMap::new();
 
         action_map.insert(r"do\(\)", Action::EnableMul);
         action_map.insert("don't", Action::DisableMul);
         action_map.insert(MUL_REGEX, Action::ApplyMul);
 
-        let mut actions = action_map.iter()
+        let mut actions = action_map
+            .iter()
             .map(|(needle, action)| {
                 let re = Regex::new(needle).unwrap();
-                return re.find_iter(input)
+                return re
+                    .find_iter(input)
                     .map(|m| (action, m.as_str(), m.start()))
                     .collect::<Vec<(&Action, &str, usize)>>();
             })
-            .into_iter().flatten().collect::<Vec<(&Action, &str, usize)>>();
+            .into_iter()
+            .flatten()
+            .collect::<Vec<(&Action, &str, usize)>>();
         actions.sort_by_key(|&(_, _, p)| p);
 
         let mut enable = true;
@@ -75,9 +79,8 @@ impl Solution for Day3 {
             }
         };
 
-        actions.iter()
-            .for_each(|(a, s, _)| apply_action(a, *s));
-        
+        actions.iter().for_each(|(a, s, _)| apply_action(a, *s));
+
         sum.to_string()
     }
 }

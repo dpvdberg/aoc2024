@@ -1,7 +1,7 @@
 use crate::day5::Day5;
 use crate::solution::Solution;
 
-static SAMPLE : &str = r#"
+static SAMPLE: &str = r#"
 47|53
 97|13
 97|61
@@ -34,19 +34,12 @@ static SAMPLE : &str = r#"
 
 #[test]
 fn test_part1() {
-    assert_eq!(
-        Day5::solve_part1(SAMPLE),
-        "143"
-    );
+    let day = Day5 {};
+    assert_eq!(day.solve_part1(SAMPLE), "143");
 }
 
 #[test]
 fn test_part2() {
-    assert_eq!(
-        Day5::solve_part2(SAMPLE),
-        "123"
-    );
+    let day = Day5 {};
+    assert_eq!(day.solve_part2(SAMPLE), "123");
 }
-
-
-

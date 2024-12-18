@@ -3,8 +3,10 @@ use crate::solution::Solution;
 
 #[test]
 fn test_part1() {
+    let day = Day4 {};
     assert_eq!(
-        Day4::solve_part1(r#"
+        day.solve_part1(
+            r#"
         MMMSXXMASM
         MSAMXMSMSA
         AMXSXMAAMM
@@ -15,15 +17,18 @@ fn test_part1() {
         SAXAMASAAA
         MAMMMXMMMM
         MXMXAXMASX
-        "#),
+        "#
+        ),
         "18"
     );
 }
 
 #[test]
 fn test_part1_non_square() {
+    let day = Day4 {};
     assert_eq!(
-        Day4::solve_part1(r#"
+        day.solve_part1(
+            r#"
         ..X.
         ..M.
         ..A.
@@ -31,15 +36,18 @@ fn test_part1_non_square() {
         ....
         ....
         ....
-        "#),
+        "#
+        ),
         "1"
     );
 }
 
 #[test]
 fn test_part2() {
+    let day = Day4 {};
     assert_eq!(
-        Day4::solve_part2(r#"
+        day.solve_part2(
+            r#"
         .M.S......
         ..A..MSMS.
         .M.S.MAA..
@@ -50,46 +58,53 @@ fn test_part2() {
         .A.A.A.A..
         M.M.M.M.M.
         ..........
-        "#),
+        "#
+        ),
         "9"
     );
 }
 
 #[test]
 fn test_part2_simple_updown() {
+    let day = Day4 {};
     assert_eq!(
-        Day4::solve_part2(r#"
+        day.solve_part2(
+            r#"
         S.S
         .A.
         M.M
-        "#),
+        "#
+        ),
         "1"
     );
 }
 
 #[test]
 fn test_part2_simple_leftright() {
+    let day = Day4 {};
     assert_eq!(
-        Day4::solve_part2(r#"
+        day.solve_part2(
+            r#"
         S.M
         .A.
         S.M
-        "#),
+        "#
+        ),
         "1"
     );
 }
 
 #[test]
 fn test_part2_simple_cross() {
+    let day = Day4 {};
     assert_eq!(
-        Day4::solve_part2(r#"
+        day.solve_part2(
+            r#"
         M.S
         .A.
         S.M
-        "#),
+        "#
+        ),
         "0"
     );
 }
-
-
-

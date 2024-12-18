@@ -11,7 +11,7 @@ struct PlutonianPebbles {
 
 fn replace_if_zero(pebble: u64) -> Option<u64> {
     if pebble == 0 {
-        return Some(1)
+        return Some(1);
     }
 
     None
@@ -27,7 +27,7 @@ fn split_even_length(pebble: u64) -> Option<(u64, u64)> {
         let right = pebble % divisor;
 
         // replace current with left
-        return Some((left, right))
+        return Some((left, right));
     }
 
     None
@@ -54,10 +54,13 @@ fn blink_pebble(pebble: u64, count: u32) -> u64 {
     let new_pebbles = change_stone(pebble);
     if count == 1 {
         // println!("{}", new_pebbles.iter().map(|p| p.to_string()).collect::<Vec<_>>().join(" "));
-        return new_pebbles.len() as u64
+        return new_pebbles.len() as u64;
     }
 
-    new_pebbles.iter().map(|p| blink_pebble(*p, count - 1)).sum()
+    new_pebbles
+        .iter()
+        .map(|p| blink_pebble(*p, count - 1))
+        .sum()
 }
 
 impl PlutonianPebbles {
@@ -76,12 +79,12 @@ fn parse_input(input: &str) -> PlutonianPebbles {
 }
 
 impl Solution for Day11 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let plutonian_pebbles = parse_input(&input);
         plutonian_pebbles.blink(25).to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let plutonian_pebbles = parse_input(&input);
         plutonian_pebbles.blink(75).to_string()
     }

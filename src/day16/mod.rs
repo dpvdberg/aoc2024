@@ -130,7 +130,7 @@ impl Maze {
                     } else if new_distance == current_distance {
                         pred.get_mut(&neighbor.clone()).unwrap().push(node.clone());
                     }
-                    
+
                     let new_priority = min(current_distance, new_distance);
                     // println!("Updating priority of {:?} (direction: {:?}) from {} to {}", neighbor.position, neighbor.direction, current_distance, new_priority);
                     queue.change_priority(&neighbor, Reverse(new_priority));
@@ -145,7 +145,8 @@ impl Maze {
         let (end_node, distance) = distances
             .iter()
             .filter(|(n, _)| self.tiles.at_value(&n.position) == MazeTile::End)
-            .min_by_key(|(_, &d)| d).unwrap();
+            .min_by_key(|(_, &d)| d)
+            .unwrap();
 
         (*distance, pred, end_node.clone())
     }
@@ -159,7 +160,7 @@ impl Maze {
 
         let mut best_path_points: HashSet<Vector2<i32>> = HashSet::new();
 
-        let mut visited : HashSet<Vector2<i32>> = HashSet::new();
+        let mut visited: HashSet<Vector2<i32>> = HashSet::new();
         let mut remaining: VecDeque<MazeNode> = VecDeque::new();
         remaining.push_front(end_node.clone());
 
@@ -180,11 +181,13 @@ impl Maze {
                     }
                     remaining.push_back(predecessor.clone());
 
-                    best_path_points.extend(current.position.get_intermediate_points(&predecessor.position));
+                    best_path_points.extend(
+                        current
+                            .position
+                            .get_intermediate_points(&predecessor.position),
+                    );
                 }
             }
-
-
         }
 
         best_path_points.iter().count() as u32
@@ -204,12 +207,12 @@ fn parse_input(input: &str) -> Maze {
 }
 
 impl Solution for Day16 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let maze = parse_input(input);
         maze.shortest_path_length().to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let maze = parse_input(input);
         maze.observer_wall_count().to_string()
     }

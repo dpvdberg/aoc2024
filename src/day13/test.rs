@@ -1,11 +1,12 @@
 use crate::day13::Day13;
 use crate::solution::Solution;
 
-
 #[test]
 fn test_part1() {
+    let day = Day13 {};
     assert_eq!(
-        Day13::solve_part1(r#"
+        day.solve_part1(
+            r#"
         Button A: X+94, Y+34
         Button B: X+22, Y+67
         Prize: X=8400, Y=5400
@@ -21,15 +22,14 @@ fn test_part1() {
         Button A: X+69, Y+23
         Button B: X+27, Y+71
         Prize: X=18641, Y=10279
-        "#),
+        "#
+        ),
         "480"
     );
 }
 
 #[test]
 fn test_part2() {
-    assert_eq!(
-        Day13::solve_part2(""),
-        ""
-    );
+    let day = Day13 {};
+    assert_eq!(day.solve_part2(""), "");
 }

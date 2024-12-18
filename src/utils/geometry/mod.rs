@@ -18,7 +18,7 @@ impl Direction {
             Direction::Right => vector![1, 0],
         }
     }
-    
+
     pub(crate) fn clockwise(&self) -> Direction {
         match self {
             Direction::Up => Direction::Right,

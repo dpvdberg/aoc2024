@@ -7,10 +7,10 @@ pub struct Registers {
     pub c: i64,
 }
 
-pub struct Computer {    
+pub struct Computer {
     pub registers: Registers,
     pub instruction_pointer: usize,
-    pub output : Vec<i64>,
+    pub output: Vec<i64>,
 }
 
 impl Computer {
@@ -21,7 +21,7 @@ impl Computer {
             output: vec![],
         }
     }
-    
+
     pub fn execute(&mut self, instructions: &[Instruction]) {
         while self.instruction_pointer < instructions.len() {
             let pointer = self.instruction_pointer;

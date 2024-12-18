@@ -1,9 +1,9 @@
+use crate::solution::Solution;
+use crate::utils::geometry::Direction;
+use crate::utils::nalgebra::{MatrixHelpers, MatrixParser, VectorHelpers};
+use nalgebra::{vector, DMatrix, Vector2};
 use std::collections::VecDeque;
 use std::fmt;
-use nalgebra::{vector, DMatrix, Vector2};
-use crate::solution::Solution;
-use crate::utils::geometry::{Direction};
-use crate::utils::nalgebra::{MatrixHelpers, VectorHelpers, MatrixParser};
 
 #[cfg(test)]
 mod test;
@@ -16,7 +16,7 @@ enum WarehouseTile {
     Floor,
     BoxLeft,
     BoxRight,
-    Robot
+    Robot,
 }
 impl fmt::Display for WarehouseTile {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
@@ -34,24 +34,33 @@ impl fmt::Display for WarehouseTile {
 struct Warehouse {
     tiles: DMatrix<WarehouseTile>,
     robot_position: Vector2<i32>,
-    remaining_moves: VecDeque<Direction>
+    remaining_moves: VecDeque<Direction>,
 }
 
 impl Warehouse {
     fn box_positions(&self) -> Vec<Vector2<i32>> {
         (0..self.tiles.ncols())
             .flat_map(|x| (0..self.tiles.nrows()).map(move |y| vector![x as i32, y as i32]))
-            .filter(|v : &Vector2<i32>| *self.tiles.at(v) == WarehouseTile::Box || *self.tiles.at(v) == WarehouseTile::BoxLeft)
+            .filter(|v: &Vector2<i32>| {
+                *self.tiles.at(v) == WarehouseTile::Box
+                    || *self.tiles.at(v) == WarehouseTile::BoxLeft
+            })
             .collect::<Vec<Vector2<i32>>>()
     }
-    
-    fn move_to_two_sided(&mut self, to: Vector2<i32>, direction: &Direction, other_side: &Direction, apply: bool) -> bool {
+
+    fn move_to_two_sided(
+        &mut self,
+        to: Vector2<i32>,
+        direction: &Direction,
+        other_side: &Direction,
+        apply: bool,
+    ) -> bool {
         let this_can_move = self.move_into(to, direction, false);
 
         if direction.is_vertical() {
             let other_to = to + other_side.to_vector();
             let other_can_move = self.move_into(other_to, direction, false);
-            
+
             if this_can_move && other_can_move {
                 self.move_into(to, direction, apply);
                 self.move_into(other_to, direction, apply);
@@ -63,7 +72,7 @@ impl Warehouse {
                 return false;
             }
         }
-        
+
         true
     }
 
@@ -121,8 +130,6 @@ impl Warehouse {
     }
 }
 
-
-
 impl fmt::Display for Warehouse {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         for row in 0..self.tiles.nrows() {
@@ -145,7 +152,7 @@ fn parse_warehouse(input: &str, expand: bool) -> DMatrix<WarehouseTile> {
         input_processed = input_processed.replace(".", "..");
         input_processed = input_processed.replace("@", "@.");
     }
-    
+
     let tiles = input_processed.to_matrix(|c| match c {
         '#' => WarehouseTile::Wall,
         'O' => WarehouseTile::Box,
@@ -153,22 +160,24 @@ fn parse_warehouse(input: &str, expand: bool) -> DMatrix<WarehouseTile> {
         '@' => WarehouseTile::Robot,
         '[' => WarehouseTile::BoxLeft,
         ']' => WarehouseTile::BoxRight,
-        _ => panic!("Could not parse warehouse tile: {}", c)
+        _ => panic!("Could not parse warehouse tile: {}", c),
     });
 
     tiles
 }
 
 fn parse_moves(input: &str) -> VecDeque<Direction> {
-    input.chars()
+    input
+        .chars()
         .filter(|&c| c != '\n' && c != '\r')
         .map(|c| match c {
             '>' => Direction::Right,
             '<' => Direction::Left,
             '^' => Direction::Up,
             'v' => Direction::Down,
-            _ => panic!("Could not parse move: {}", c)
-        }).collect()
+            _ => panic!("Could not parse move: {}", c),
+        })
+        .collect()
 }
 
 fn parse_input(input: &str, expand: bool) -> Warehouse {
@@ -183,25 +192,36 @@ fn parse_input(input: &str, expand: bool) -> Warehouse {
     let warehouse = parse_warehouse(raw_warehouse, expand);
     let pos = (0..warehouse.ncols())
         .flat_map(|x| (0..warehouse.nrows()).map(move |y| vector![x as i32, y as i32]))
-        .find(|v : &Vector2<i32>| *warehouse.at(v) == WarehouseTile::Robot).unwrap();
+        .find(|v: &Vector2<i32>| *warehouse.at(v) == WarehouseTile::Robot)
+        .unwrap();
 
     Warehouse {
         tiles: warehouse,
         robot_position: pos,
-        remaining_moves: parse_moves(raw_robot_movement)
+        remaining_moves: parse_moves(raw_robot_movement),
     }
 }
 
 impl Solution for Day15 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let mut warehouse = parse_input(input, false);
         warehouse.robot_walk();
-        warehouse.box_positions().iter().map(|p| 100 * p.y + p.x).sum::<i32>().to_string()
+        warehouse
+            .box_positions()
+            .iter()
+            .map(|p| 100 * p.y + p.x)
+            .sum::<i32>()
+            .to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let mut warehouse = parse_input(input, true);
         warehouse.robot_walk();
-        warehouse.box_positions().iter().map(|p| 100 * p.y + p.x).sum::<i32>().to_string()
+        warehouse
+            .box_positions()
+            .iter()
+            .map(|p| 100 * p.y + p.x)
+            .sum::<i32>()
+            .to_string()
     }
 }

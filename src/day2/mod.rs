@@ -58,11 +58,11 @@ fn count_safe_reports(input: &str, allow_removal: bool) -> usize {
 }
 
 impl Solution for Day2 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         count_safe_reports(input, false).to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         count_safe_reports(input, true).to_string()
     }
 }

@@ -1,6 +1,6 @@
-use crate::utils::nalgebra::{VectorHelpers, MatrixParser};
 use crate::solution::Solution;
-use crate::utils::geometry::{Direction};
+use crate::utils::geometry::Direction;
+use crate::utils::nalgebra::{MatrixParser, VectorHelpers};
 use nalgebra::{DMatrix, Vector2};
 use std::collections::{HashSet, VecDeque};
 use strum::IntoEnumIterator;
@@ -91,21 +91,20 @@ impl TopologicalMap {
 }
 
 fn parse_input(input: &str) -> TopologicalMap {
-    let heights = input.to_string()
+    let heights = input
+        .to_string()
         .to_matrix(|c| c.to_digit(10).map(|d| d as i32).unwrap_or(-1));
 
-    TopologicalMap {
-        heights,
-    }
+    TopologicalMap { heights }
 }
 
 impl Solution for Day10 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let map = parse_input(input);
         map.score().to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let map = parse_input(input);
         map.rating().to_string()
     }

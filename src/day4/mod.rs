@@ -1,6 +1,6 @@
 use crate::solution::Solution;
-use nalgebra::{DMatrix, Vector2};
 use crate::utils::nalgebra::MatrixParser;
+use nalgebra::{DMatrix, Vector2};
 
 #[cfg(test)]
 mod test;
@@ -29,16 +29,12 @@ fn count_occurrences(
     directions: &Vec<Vector2<i32>>,
     needle: &str,
 ) -> u32 {
-
-    if location.x < 0
-        || location.y < 0
-    {
+    if location.x < 0 || location.y < 0 {
         return 0;
     }
 
     let matrix_index = (location.y as usize, location.x as usize);
-    if matrix.get(matrix_index).is_none()
-    {
+    if matrix.get(matrix_index).is_none() {
         return 0;
     }
 
@@ -67,11 +63,10 @@ fn count_occurrences(
 }
 
 impl Solution for Day4 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let matrix = parse_input(input);
 
-        let directions = get_directions(
-            vec![-1, 0, 1], vec![-1, 0, 1]);
+        let directions = get_directions(vec![-1, 0, 1], vec![-1, 0, 1]);
 
         let mut sum: u32 = 0;
         for row in 0..matrix.nrows() {
@@ -84,7 +79,7 @@ impl Solution for Day4 {
         sum.to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let matrix = parse_input(input);
         let diagonals = get_directions(vec![-1, 1], vec![-1, 1]);
         let diagonal_groups = vec![
@@ -103,7 +98,7 @@ impl Solution for Day4 {
                     if count_s != 2 {
                         continue;
                     }
-                    
+
                     let count_m = count_occurrences(&matrix, loc, &diagonals, "AM");
                     if count_m == 2 {
                         sum += 1;

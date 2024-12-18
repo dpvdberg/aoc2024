@@ -1,7 +1,7 @@
-use regex::Regex;
 use crate::day17::computer::Registers;
 use crate::day17::instruction::Instruction;
 use crate::day17::operation::*;
+use regex::Regex;
 
 pub struct ComputerParser;
 
@@ -57,7 +57,7 @@ impl ComputerParser {
                         operation: Self::build_operation(pair[0]),
                         operand: pair[1],
                     });
-                    
+
                     raw_instructions.push(pair[0]);
                     raw_instructions.push(pair[1]);
                 }

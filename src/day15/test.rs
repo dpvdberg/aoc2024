@@ -1,7 +1,7 @@
 use crate::day15::Day15;
 use crate::solution::Solution;
 
-static SAMPLE : &str = r#"
+static SAMPLE: &str = r#"
 ##########
 #..O..O.O#
 #......O.#
@@ -27,24 +27,22 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^
 
 #[test]
 fn test_part1() {
-    assert_eq!(
-        Day15::solve_part1(SAMPLE),
-        "10092"
-    );
+    let day = Day15 {};
+    assert_eq!(day.solve_part1(SAMPLE), "10092");
 }
 
 #[test]
 fn test_part2() {
-    assert_eq!(
-        Day15::solve_part2(SAMPLE),
-        "9021"
-    );
+    let day = Day15 {};
+    assert_eq!(day.solve_part2(SAMPLE), "9021");
 }
 
 #[test]
 fn test_part2_small() {
+    let day = Day15 {};
     assert_eq!(
-        Day15::solve_part2(r#"
+        day.solve_part2(
+            r#"
         #######
         #...#.#
         #.....#
@@ -53,7 +51,8 @@ fn test_part2_small() {
         #.....#
         #######
         
-        <vv<<^^<<^^"#),
+        <vv<<^^<<^^"#
+        ),
         "618"
     );
 }

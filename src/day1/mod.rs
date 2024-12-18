@@ -36,7 +36,7 @@ fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
 }
 
 impl Solution for Day1 {
-    fn solve_part1(input: &str) -> String {
+    fn solve_part1(&self, input: &str) -> String {
         let (left_numbers, right_numbers) = parse_input(input);
 
         let differences: Vec<i32> = left_numbers
@@ -50,7 +50,7 @@ impl Solution for Day1 {
         distance_sum.to_string()
     }
 
-    fn solve_part2(input: &str) -> String {
+    fn solve_part2(&self, input: &str) -> String {
         let (left_numbers, right_numbers) = parse_input(input);
 
         let right_occurrences: HashMap<i32, u32> = right_numbers
