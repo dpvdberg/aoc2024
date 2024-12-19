@@ -11,13 +11,13 @@ struct TowelAndPatterns {
 }
 
 
-#[memoize]
-fn count_possible_patterns(towels: Vec<String>, pattern: String) -> usize {
+#[memoize(Ignore: towels)]
+fn count_possible_patterns(towels: &Vec<String>, pattern: String) -> usize {
     if pattern.is_empty() { return 1 }
 
     towels.iter()
         .filter_map(|towel| pattern.strip_prefix(towel))
-        .map(|remaining_pattern| count_possible_patterns(towels.clone(), remaining_pattern.into()))
+        .map(|remaining_pattern| count_possible_patterns(towels, remaining_pattern.into()))
         .sum()
 }
 
@@ -43,14 +43,14 @@ impl TowelAndPatterns {
     fn count_valid_patterns(&self) -> usize {
         self.patterns
             .iter()
-            .filter(|&p| count_possible_patterns(self.towels.clone(), p.into()) > 0)
+            .filter(|&p| count_possible_patterns(&self.towels, p.into()) > 0)
             .count()
     }
 
     fn count_possible_patterns(&self) -> usize {
         self.patterns
             .iter()
-            .map(|p| count_possible_patterns(self.towels.clone(), p.into()))
+            .map(|p| count_possible_patterns(&self.towels, p.into()))
             .sum()
     }
 }
