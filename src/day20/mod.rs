@@ -39,8 +39,8 @@ struct RaceTrack {
 
 type Position = Vector2<i32>;
 
-struct RaceTrackPath {
-    track: RaceTrack,
+struct RaceTrackPath<'a> {
+    track: &'a RaceTrack,
     path: Vec<Position>,
 }
 
@@ -101,7 +101,7 @@ impl RaceTrack {
         path.push(current);
 
         RaceTrackPath {
-            track: self.clone(),
+            track: self,
             path,
         }
     }
@@ -121,17 +121,17 @@ impl RaceTrack {
         neighbors
     }
 
-    fn find_jumps(
+    fn find_jumps<'a>(
         &self,
-        position: &Position,
+        position: &'a Position,
         jump_size: usize,
-    ) -> Vec<(Position, Position, usize)> {
+    ) -> Vec<(&'a Position, Position)> {
         let jumps = Self::manhattan_neighbors(position, jump_size);
         let landings = jumps
             .iter()
             .filter(|p| self.within_bounds(p))
             .filter(|p| self.field[p.to_matrix_index()] != RaceTile::Wall)
-            .map(|p| (position.clone(), p.clone(), jump_size))
+            .map(|&p| (position, p))
             .collect();
 
         landings
@@ -151,7 +151,8 @@ impl RaceTrack {
             .flat_map(|jump_size| {
                 path.iter()
                     .flat_map(|p| self.find_jumps(p, jump_size))
-                    .collect::<Vec<(Position, Position, usize)>>()
+                    .map(|(start, end)| (start, end, jump_size))
+                    .collect::<Vec<(&Position, Position, usize)>>()
             })
             .map(|(start, end, jump_size)| (index_map[&start], index_map[&end], jump_size))
             .map(|(start_pos, end_pos, jump_size)| end_pos - (start_pos + jump_size as i32))
@@ -162,7 +163,7 @@ impl RaceTrack {
     }
 }
 
-impl fmt::Display for RaceTrackPath {
+impl<'a> fmt::Display for RaceTrackPath<'a> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         for row in 0..self.track.field.nrows() {
             for col in 0..self.track.field.ncols() {
