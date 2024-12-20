@@ -2,6 +2,7 @@ use crate::solution::Solution;
 use crate::utils::geometry::Direction;
 use crate::utils::nalgebra::{MatrixHelpers, MatrixParser, VectorHelpers};
 use nalgebra::{DMatrix, Vector2};
+use rayon::{iter::IntoParallelIterator, iter::ParallelIterator};
 use std::collections::HashMap;
 use std::fmt;
 use strum::IntoEnumIterator;
@@ -144,7 +145,7 @@ impl RaceTrack {
             .collect::<HashMap<_, _>>();
 
         let cheats = (1..=max_jump_size)
-            .into_iter()
+            .into_par_iter()
             .flat_map(|jump_size| {
                 path.iter()
                     .flat_map(|p| self.find_jumps(p, jump_size))
