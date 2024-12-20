@@ -3,7 +3,7 @@ use crate::utils::geometry::Direction;
 use crate::utils::nalgebra::{MatrixHelpers, MatrixParser, VectorHelpers};
 use nalgebra::{DMatrix, Vector2};
 use rayon::{iter::IntoParallelIterator, iter::ParallelIterator};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt;
 use strum::IntoEnumIterator;
 
@@ -76,7 +76,7 @@ impl RaceTrack {
         self.field.find_index(RaceTile::End).unwrap()
     }
 
-    fn step(&self, position: &Position, history: &Vec<Position>) -> Position {
+    fn step(&self, position: &Position, history: &HashSet<Position>) -> Position {
         self.neighbors(position, vec![RaceTile::Floor, RaceTile::End])
             .iter()
             .filter(|p| !history.contains(p))
@@ -87,20 +87,22 @@ impl RaceTrack {
 
     fn find_path(&self) -> RaceTrackPath {
         let mut current = self.start_position();
-        let mut positions = vec![];
+        let mut path = vec![];
+        let mut visited = HashSet::new();
 
         while current != self.end_position() {
-            positions.push(current);
+            path.push(current);
+            visited.insert(current);
 
-            current = self.step(&current, &positions);
+            current = self.step(&current, &visited);
         }
 
         // Add end to path
-        positions.push(current);
+        path.push(current);
 
         RaceTrackPath {
             track: self.clone(),
-            path: positions,
+            path,
         }
     }
 
