@@ -3,7 +3,7 @@ use crate::utils::geometry::Direction;
 use crate::utils::nalgebra::MatrixHelpers;
 use itertools::Itertools;
 use memoize::memoize;
-use nalgebra::{Matrix2x3, Matrix4x3, Vector2};
+use nalgebra::{Matrix2x3, Matrix4x3};
 use std::iter;
 use strum::IntoEnumIterator;
 
@@ -133,7 +133,7 @@ fn dpad(input: String, robots: usize) -> usize {
                 .unwrap();
         }
     }
-    
+
     acc
 }
 
