@@ -1,4 +1,4 @@
-use nalgebra::{vector, DMatrix, Vector2};
+use nalgebra::{vector, DMatrix, Matrix, Scalar, Storage, Vector2};
 
 pub trait MatrixParser<T> {
     fn to_matrix(&self, char_map: fn(char) -> T) -> DMatrix<T>;
@@ -82,16 +82,27 @@ impl VectorHelpers for Vector2<i32> {
 pub trait MatrixHelpers<T> {
     fn at(&self, location: &Vector2<i32>) -> &T;
     fn at_value(&self, location: &Vector2<i32>) -> T;
+    fn valid_index(&self, l: &Vector2<i32>) -> bool;
     fn find_index(&self, element: T) -> Option<Vector2<i32>>;
 }
 
-impl<T: PartialEq + Clone> MatrixHelpers<T> for DMatrix<T> {
+impl<T, R, C, S> MatrixHelpers<T> for Matrix<T, R, C, S>
+where
+    T: Scalar + PartialEq + Clone,
+    R: nalgebra::Dim,
+    C: nalgebra::Dim,
+    S: Storage<T, R, C>,
+{
     fn at(&self, location: &Vector2<i32>) -> &T {
         &self[location.to_matrix_index()]
     }
 
     fn at_value(&self, location: &Vector2<i32>) -> T {
         self[location.to_matrix_index()].clone()
+    }
+
+    fn valid_index(&self, l: &Vector2<i32>) -> bool {
+        l.x >= 0 && l.x < self.ncols() as i32 && l.y >= 0 && l.y < self.nrows() as i32
     }
 
     fn find_index(&self, element: T) -> Option<Vector2<i32>> {
